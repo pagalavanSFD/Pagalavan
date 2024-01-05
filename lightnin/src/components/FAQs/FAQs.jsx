@@ -1,0 +1,78 @@
+// import React from 'react';
+
+// const FAQs = () => {
+//   return (
+//     <div>
+//     1. *What is car service?*<br></br>
+//     Car service involves routine maintenance and inspections to ensure the proper functioning and longevity of your vehicle. It typically includes tasks like oil changes, tire rotations, brake inspections, and fluid checks.<br></br>
+ 
+//  2. *How often should I service my car?*<br></br>
+//     The frequency of car service depends on factors such as your vehicle's make and model, driving conditions, and the manufacturer's recommendations. Typically, it's recommended every 6 months or every 5,000 to 7,500 miles.<br></br>
+ 
+//  3. *What is included in a standard car service?*<br></br>
+//     A standard car service often includes an oil change, tire rotation, brake inspection, fluid top-up, air filter replacement, and a general vehicle inspection.<br></br>
+ 
+//  4. *Why is regular car service important?*<br></br>
+//     Regular service helps prevent potential issues, extends the life of your vehicle, improves fuel efficiency, and ensures safety by identifying and addressing potential problems early on.<br></br>
+ 
+//  5. *Can I service my car myself?*<br></br>
+//     Some basic maintenance tasks can be done at home, like checking fluid levels or changing wiper blades. However, many tasks, especially those requiring specialized equipment, are best left to professional mechanics.<br></br>
+ 
+//  6. *How much does a car service cost?*<br></br>
+//     The cost of a car service varies depending on the type of service, your vehicle's make and model, and your location. Regular maintenance is often more cost-effective than dealing with major repairs resulting from neglect.<br></br>
+ 
+//  7. *Do I have to service my car at the dealership?*<br></br>
+//     No, you are not obligated to service your car at the dealership. You can choose to have your car serviced at an independent auto repair shop that meets the manufacturer's specifications to maintain your warranty.<br></br>
+ 
+//  8. *What is the difference between a major service and a minor service?*<br></br>
+//     A minor service typically includes basic maintenance tasks like oil and filter changes, while a major service is more comprehensive and may involve replacing additional components such as spark plugs, timing belts, and air filters.<br></br>
+ 
+//  9. *How do I know if my car needs service?*<br></br>
+//     Pay attention to warning lights on your dashboard, unusual noises, changes in performance, or any other signs of trouble. Additionally, refer to your vehicle's owner's manual for recommended service intervals.<br></br>
+ 
+//  10. *What should I do if my car breaks down?*<br></br>
+//      If your car breaks down, move to a safe location, turn on hazard lights, and call for roadside assistance. Regular maintenance can reduce the likelihood of breakdowns, so staying up-to-date on service is crucial.<br></br>
+//     </div>
+//   )
+// }
+
+// export default FAQs;
+
+import React from 'react'
+
+const FAQs = () => {
+  return (
+    <div>
+    1. *What is car service?*<br></br>
+Car service involves routine maintenance and inspections to ensure the proper functioning and longevity of your vehicle. It typically includes tasks like oil changes, tire rotations, brake inspections, and fluid checks.<br></br>
+ 
+2. *How often should I service my car?*<br></br>    The frequency of car service depends on factors such as your vehicle's make and model, driving conditions, and the manufacturer's recommendations. Typically, it's recommended every 6 months or every 5,000 to 7,500 miles.<br></br>
+ 
+3. *What is included in a standard car service?*<br></br>
+A standard car service often includes an oil change, tire rotation, brake inspection, fluid top-up, air filter replacement, and a general vehicle inspection.<br></br>
+ 
+  4. *Why is regular car service important?*<br></br>
+     Regular service helps prevent potential issues, extends the life of your vehicle, improves fuel efficiency, and ensures safety by identifying and addressing potential problems early on.<br></br>
+ 
+  5. *Can I service my car myself?*<br></br>
+     Some basic maintenance tasks can be done at home, like checking fluid levels or changing wiper blades. However, many tasks, especially those requiring specialized equipment, are best left to professional mechanics.<br></br>
+ 
+  6. *How much does a car service cost?*<br></br>
+     The cost of a car service varies depending on the type of service, your vehicle's make and model, and your location. Regular maintenance is often more cost-effective than dealing with major repairs resulting from neglect.<br></br>
+ 
+  7. *Do I have to service my car at the dealership?*<br></br>
+     No, you are not obligated to service your car at the dealership. You can choose to have your car serviced at an independent auto repair shop that meets the manufacturer's specifications to maintain your warranty.<br></br>
+ 
+  8. *What is the difference between a major service and a minor service?*<br></br>
+     A minor service typically includes basic maintenance tasks like oil and filter changes, while a major service is more comprehensive and may involve replacing additional components such as spark plugs, timing belts, and air filters.<br></br>
+ 
+  9. *How do I know if my car needs service?*<br></br>
+     Pay attention to warning lights on your dashboard, unusual noises, changes in performance, or any other signs of trouble. Additionally, refer to your vehicle's owner's manual for recommended service intervals.<br></br>
+ 
+  10. *What should I do if my car breaks down?*<br></br>
+      If your car breaks down, move to a safe location, turn on hazard lights, and call for roadside assistance. Regular maintenance can reduce the likelihood of breakdowns, so staying up-to-date on service is crucial.<br></br>
+    </div>
+  )
+}
+
+export default FAQs;

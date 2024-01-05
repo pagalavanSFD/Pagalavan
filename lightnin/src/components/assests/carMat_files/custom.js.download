@@ -1,0 +1,351 @@
+/** Shopify CDN: Minification failed
+
+Line 20:2 Transforming const to the configured target environment ("es5") is not supported yet
+Line 23:2 Transforming const to the configured target environment ("es5") is not supported yet
+Line 29:2 Transforming const to the configured target environment ("es5") is not supported yet
+Line 35:2 Transforming const to the configured target environment ("es5") is not supported yet
+Line 74:4 Transforming const to the configured target environment ("es5") is not supported yet
+Line 201:4 Transforming const to the configured target environment ("es5") is not supported yet
+Line 300:4 Transforming const to the configured target environment ("es5") is not supported yet
+Line 333:4 Transforming const to the configured target environment ("es5") is not supported yet
+
+**/
+!function (fun) {
+  'function' == typeof define && define.amd ? define(fun) : fun()
+}(function () {
+  'use strict';
+
+  /* --- Pincode Checker - Start --- */
+
+  const mynpcPincodeLen = 6,
+    mynpcPincodeStorageKey = "mynpc_pincode";
+
+  const mynpcInputCodeTextCheckState = 'Please enter PIN code to check delivery time & Pay on Delivery Availability',
+    mynpcInputCodeTextUnserviceableState = 'Unfortunately we do not ship to your pincode',
+    mynpcInvalidPincodeMsg = 'Please enter a valid pincode',
+    mynpcPlsTryAgainMsg = 'Please try again',
+    mynpcGetByPrefix = 'Get it by ';
+
+  const mynpcCheckStateClass = 'mynpc-state-check',
+    mynpcServiceableStateClass = 'mynpc-state-serviceable',
+    mynpcUnserviceableStateClass = 'mynpc-state-unserviceable',
+    mynpcInputCodeTextErrorClass = 'mynpc-input-error',
+    mynpcHideClass = 'mynpc-hide';
+
+  const mynpcMainContainerSelector = '.mynpc-container',
+    mynpcErrorContainerSelector = '.mynpc-error-container',
+    mynpcErrorTextSelector = '.mynpc-error-text',
+    mynpcDeliveryFormSelector = '.mynpc-check-delivery-form',
+    mynpcDeliveryFormCodeInputSelector = '.mynpc-code-input',
+    mynpcDeliveryFormCodeInputProductKeySelector = '.mynpc-code-input-product-key',
+    mynpcCheckCodeButtonSelector = '.mynpc-check-code-button',
+    mynpcChangeCodeButtonSelector = '.mynpc-change-code-button',
+    mynpcInputCodeTextSelector = '.mynpc-input-code-text',
+    mynpcDeliveryInfoGetBySelector = '.mynpc-delivery-info-get-by',
+    mynpcDeliveryInfoItemTitleSelector = '.mynpc-delivery-info-item-title';
+
+  //
+  //
+  //
+
+  function mynpcEnableInputCode(mainContainer) {
+    var codeInput = mainContainer.querySelector(mynpcDeliveryFormCodeInputSelector);
+    codeInput.disabled = false;
+  }
+
+  function mynpcDisableInputCode(mainContainer) {
+    var codeInput = mainContainer.querySelector(mynpcDeliveryFormCodeInputSelector);
+    codeInput.disabled = true;
+  }
+
+  //
+  //
+
+  function mynpcClearPincode(mainContainer) {
+    mynpcRemoveSavedPincode();
+
+    var codeInput = mainContainer.querySelector(mynpcDeliveryFormCodeInputSelector);
+    codeInput.value = '';
+  }
+
+  //
+
+  function mynpcShowErrorMsg(mainContainer, msg) {
+    const errorContainer = mainContainer.querySelector(mynpcErrorContainerSelector);
+    var errorText = mainContainer.querySelector(mynpcErrorTextSelector);
+
+    errorText.innerText = msg;
+
+    errorContainer.classList.remove(mynpcHideClass);
+    setTimeout(function () {
+      errorContainer.classList.add(mynpcHideClass);
+    }, 3000);
+  }
+
+  //
+  //
+  //
+
+  function mynpcSwitchToCheckState(mainContainer) {
+    mainContainer.classList.remove(mynpcServiceableStateClass);
+    mainContainer.classList.remove(mynpcUnserviceableStateClass);
+    mainContainer.classList.add(mynpcCheckStateClass);
+
+    mynpcEnableInputCode(mainContainer);
+    mynpcClearPincode(mainContainer);
+
+    var inputCodeText = mainContainer.querySelector(mynpcInputCodeTextSelector);
+    inputCodeText.innerText = mynpcInputCodeTextCheckState;
+    inputCodeText.classList.remove(mynpcInputCodeTextErrorClass);
+  }
+
+  //
+  //
+
+  function mynpcSwitchToServiceableState(mainContainer, respJson) {
+    var basicJson = respJson.data.basic;
+
+    var getBy = mainContainer.querySelector(mynpcDeliveryInfoGetBySelector);
+    var getByTitle = getBy.querySelector(mynpcDeliveryInfoItemTitleSelector);
+    getByTitle.innerText = mynpcGetByPrefix + mynpcGetFormattedDate(basicJson.delivery_in_days);
+
+    mainContainer.classList.remove(mynpcCheckStateClass);
+    mainContainer.classList.remove(mynpcUnserviceableStateClass);
+    mainContainer.classList.add(mynpcServiceableStateClass);
+
+    mynpcDisableInputCode(mainContainer);
+  }
+
+  //
+  //
+
+  function mynpcSwitchToUnserviceableState(mainContainer) {
+    mainContainer.classList.remove(mynpcCheckStateClass);
+    mainContainer.classList.remove(mynpcServiceableStateClass);
+    mainContainer.classList.add(mynpcUnserviceableStateClass);
+
+    mynpcDisableInputCode(mainContainer);
+
+    var inputCodeText = mainContainer.querySelector(mynpcInputCodeTextSelector);
+    inputCodeText.innerText = mynpcInputCodeTextUnserviceableState;
+    inputCodeText.classList.add(mynpcInputCodeTextErrorClass);
+  }
+
+  //
+  //
+  //
+
+  function mynpcInitEventHandlers() {
+    var deliveryFormEles = document.querySelectorAll(mynpcDeliveryFormSelector);
+
+    var index = 0;
+    while (index < deliveryFormEles.length) {
+      var deliveryForm = deliveryFormEles[index];
+
+      deliveryForm.onsubmit = function (event) {
+        event.preventDefault();
+        mynpcProcessFormSubmit(this);
+      }
+
+      index += 1;
+    }
+
+    //
+
+    var codeInputEles = document.querySelectorAll(mynpcDeliveryFormCodeInputSelector);
+
+    var index = 0;
+    while (index < codeInputEles.length) {
+      var codeInput = codeInputEles[index];
+
+      codeInput.onchange = function (event) {
+        return mynpcProcessFormPincodeInput(this);
+      }
+      codeInput.onkeyup = function (event) {
+        return mynpcProcessFormPincodeInput(this);
+      }
+
+      index += 1;
+    }
+
+    //
+
+    var changeCodeButtonEles = document.querySelectorAll(mynpcChangeCodeButtonSelector);
+
+    var index = 0;
+    while (index < changeCodeButtonEles.length) {
+      var changeCodeButton = changeCodeButtonEles[index];
+
+      changeCodeButton.addEventListener("click", function (event) {
+        event.preventDefault();
+
+        var mainContainer = this.closest(mynpcMainContainerSelector);
+
+        mynpcSwitchToCheckState(mainContainer);
+      });
+
+      index += 1;
+    }
+  }
+
+  //
+  //
+
+  function mynpcProcessFormSubmit(form) {
+    var mainContainer = form.closest(mynpcMainContainerSelector);
+
+    var pincode = form.querySelector(mynpcDeliveryFormCodeInputSelector).value;
+    var productKey = form.querySelector(mynpcDeliveryFormCodeInputProductKeySelector).value;
+
+    var pincodeInt = parseInt(pincode, 10);
+    const pincodeToCheck = pincodeInt.toString();
+
+    if (isNaN(pincodeInt) || pincodeToCheck.length !== 6) {
+      mynpcShowErrorMsg(mainContainer, mynpcInvalidPincodeMsg);
+      return;
+    }
+
+    //
+
+    var httpRequest = new XMLHttpRequest();
+
+    var httpRequestUrl = "https://api-pincheck.upscalio.com/accounts/e5d9cab1-ccca-45ca-b967-33ec6e75194b/delivery/pincodes/" + pincodeToCheck;
+    httpRequestUrl += "?product_key=" + encodeURIComponent(productKey)
+
+    httpRequest.onreadystatechange = function () {
+      if (httpRequest.readyState !== 4) {
+        return;
+      }
+
+      mynpcSavePincode(pincodeToCheck);
+
+      if (httpRequest.status === 200) {
+        var respJson = JSON.parse(httpRequest.responseText);
+        mynpcSwitchToServiceableState(mainContainer, respJson);
+        return;
+      }
+
+      if (httpRequest.status === 404) {
+        mynpcSwitchToUnserviceableState(mainContainer);
+        return;
+      }
+
+      if (httpRequest.status === 400) {
+        mynpcShowErrorMsg(mainContainer, mynpcInvalidPincodeMsg);
+        return;
+      }
+
+      mynpcShowErrorMsg(mainContainer, mynpcPlsTryAgainMsg);
+    }
+
+    httpRequest.open("GET", httpRequestUrl, true);
+    httpRequest.send(null);
+  }
+
+  //
+
+  function mynpcProcessFormPincodeInput(codeInput) {
+    var value = codeInput.value,
+      valueInt = parseInt(value, 10);
+
+    if (!isNaN(valueInt) && valueInt) {
+      value = valueInt.toString();
+
+      if (value.length <= mynpcPincodeLen) {
+        codeInput.value = value;
+      } else {
+        codeInput.value = value.substring(0, mynpcPincodeLen);
+      }
+
+      return true;
+    }
+
+    if ('' === value) {
+      codeInput.value = value;
+      return true;
+    }
+
+    codeInput.value = '';
+    return false;
+  }
+
+  //
+  //
+  //
+
+  function mynpcGetFormattedDate(daysToAdd) {
+    var today = new Date();
+    var reqDate = new Date(new Date().setDate(today.getDate() + daysToAdd));
+
+    var wk = new Intl.DateTimeFormat('en', { weekday: 'short' }).format(reqDate);
+    var mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(reqDate);
+    var da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(reqDate);
+
+    return `${wk}, ${mo} ${da}`;
+  }
+
+  //
+  //
+
+  function mynpcSavePincode(pincode) {
+    try {
+      localStorage.setItem(mynpcPincodeStorageKey, pincode);
+    } catch (error) {
+    }
+
+    sessionStorage.setItem(mynpcPincodeStorageKey, pincode);
+  }
+
+  function mynpcReadSavedPincode() {
+    const savedPincode = sessionStorage.getItem(mynpcPincodeStorageKey);
+    if (savedPincode !== null) {
+      return savedPincode;
+    }
+
+    try {
+      return localStorage.getItem(mynpcPincodeStorageKey);
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function mynpcRemoveSavedPincode() {
+    try {
+      localStorage.removeItem(mynpcPincodeStorageKey);
+    } catch (error) {
+    }
+
+    sessionStorage.removeItem(mynpcPincodeStorageKey);
+  }
+
+  /* --- Pincode Checker - End --- */
+
+  window.onload = function () {
+    mynpcInitEventHandlers();
+
+    //
+
+    var mainContainer = document.querySelector(mynpcMainContainerSelector);
+    mainContainer.classList.remove(mynpcHideClass);
+
+    //
+
+    const mynpcSavedPincode = mynpcReadSavedPincode();
+    if (mynpcSavedPincode !== null) {
+      var codeInputEles = document.querySelectorAll(mynpcDeliveryFormCodeInputSelector);
+
+      var index = 0;
+      while (index < codeInputEles.length) {
+        var codeInput = codeInputEles[index];
+        codeInput.value = mynpcSavedPincode;
+
+        var parentEle = codeInput.parentElement;
+
+        var checkCodeButton = parentEle.querySelector(mynpcCheckCodeButtonSelector);
+        checkCodeButton.click();
+
+        index += 1;
+      }
+    }
+  }
+});
